@@ -43,6 +43,7 @@ task buildImage(type: DockerBuildImage, dependsOn: build) {
     tags = ["gregnetifi/${projectDir.name}", "gregnetifi/${projectDir.name}:${version}"]
 }
 
+// Build Distributions
 distributions {
     main {
         baseName = 'example-app'
