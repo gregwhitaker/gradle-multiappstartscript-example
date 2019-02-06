@@ -13,6 +13,14 @@ Run the following command to build the example application:
 
 ## Running the Example
 
+1. Run the following command to start the example application in standalone mode:
+
+        ./gradlew run
+        
+2. Run the following command to start the example application as a Docker container:
+
+        docker run gregnetifi/gradle-multiappstartscript-example
+
 ## License
 MIT License
 
