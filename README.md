@@ -3,7 +3,7 @@
 An example of building an executable java application with Gradle that has multiple start scripts.
 
 This example builds a simple Java application that has a start script for standalone usage and a start script for when it
-is run within a Docker container. Each start script supplies the `example.message` JVM argument with a different value depending 
+is run within a Docker container. Each start script supplies the `example.deployment` JVM argument with a different value depending 
 on where the application is running.
 
 ## Building the Example
@@ -17,7 +17,7 @@ Run the following command to build the example application:
 
         ./gradlew run
         
-    If successful, you will see that the jvm argument `example.message` has been set to `Standalone`:
+    If successful, you will see that the jvm argument `example.deployment` has been set to `Standalone`:
 
         Starting gradle-multiappstartscript-example...
         -Dexample.deployment=Standalone
@@ -26,7 +26,7 @@ Run the following command to build the example application:
 
         docker run gregnetifi/gradle-multiappstartscript-example
         
-    If successful, you will see that the jvm argument `example.message` has been set to `Docker`:
+    If successful, you will see that the jvm argument `example.deployment` has been set to `Docker`:
 
         Starting gradle-multiappstartscript-example...
         -Dexample.deployment=Docker
