@@ -1,0 +1,51 @@
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+    id 'com.bmuschko.docker-remote-api' version '3.4.4'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+// Standalone Application Configuration
+application {
+    mainClassName = 'example.multiappstartscript.Main'
+    applicationName = 'example-app'
+    applicationDefaultJvmArgs = ['-Dexample.deployment=Standalone']
+}
+
+// Docker Configuration
+task createDockerStartScript(type: CreateStartScripts) {
+    mainClassName = 'example.multiappstartscript.Main'
+    classpath = startScripts.classpath
+    outputDir = startScripts.outputDir
+    applicationName = 'example-app-docker'
+    defaultJvmOpts = ['-Dexample.deployment=Docker']
+}
+build.dependsOn createDockerStartScript
+
+applicationDistribution.into('bin') {
+    duplicatesStrategy= DuplicatesStrategy.EXCLUDE
+    from(createDockerStartScript)
+    fileMode = 0755
+}
+
+task buildImage(type: DockerBuildImage, dependsOn: build) {
+    inputDir = new File("${projectDir}")
+    dockerFile = new File("${projectDir}/src/docker/Dockerfile")
+    tags = ["gregnetifi/${projectDir.name}", "gregnetifi/${projectDir.name}:${version}"]
+}
+
+distributions {
+    main {
+        baseName = 'example-app'
+        version = ''
+    }
+}
