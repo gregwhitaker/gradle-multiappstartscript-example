@@ -48,4 +48,12 @@ distributions {
         baseName = 'example-app'
         version = ''
     }
+
+    docker {
+        baseName = 'example-app-docker'
+        version = ''
+        contents {
+            with distributions.main.contents
+        }
+    }
 }
