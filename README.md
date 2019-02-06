@@ -17,9 +17,19 @@ Run the following command to build the example application:
 
         ./gradlew run
         
+    If successful, you will see that the jvm argument `example.message` has been set to `Standalone`:
+
+        Starting gradle-multiappstartscript-example...
+        -Dexample.deployment=Standalone
+        
 2. Run the following command to start the example application as a Docker container:
 
         docker run gregnetifi/gradle-multiappstartscript-example
+        
+    If successful, you will see that the jvm argument `example.message` has been set to `Docker`:
+
+        Starting gradle-multiappstartscript-example...
+        -Dexample.deployment=Docker
 
 ## License
 MIT License
