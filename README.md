@@ -2,6 +2,17 @@
 
 An example of building an executable java application with Gradle that has multiple start scripts.
 
+This example builds a simple Java application that has a start script for standalone usage and a start script for when it
+is run within a Docker container. Each start script supplies the `example.message` JVM argument with a different value depending 
+on where the application is running.
+
+## Building the Example
+Run the following command to build the example application:
+
+    ./gradlew clean buildImage
+
+## Running the Example
+
 ## License
 MIT License
 
