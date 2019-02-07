@@ -42,7 +42,6 @@ task buildImage(type: DockerBuildImage, dependsOn: build) {
     tags = ["gregnetifi/${application.applicationName}", "gregnetifi/${application.applicationName}:${version}"]
 }
 
-
 // Build Distributions
 distributions {
     main {
@@ -66,6 +65,7 @@ distributions {
 dockerDistTar {
     version = ''
 }
+
 dockerDistZip {
     enabled = false
 }
