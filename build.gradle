@@ -14,47 +14,58 @@ repositories {
     mavenCentral()
 }
 
+ext{
+    commonJvmArgs = ['-Dcommon=shared']
+}
+
 // Standalone Application Configuration
 application {
     mainClassName = 'example.multiappstartscript.Main'
     applicationName = 'example-app'
-    applicationDefaultJvmArgs = ['-Dexample.deployment=Standalone']
+    applicationDefaultJvmArgs = ['-Dexample.deployment=Standalone'].plus(project.ext.commonJvmArgs)
 }
 
 // Docker Configuration
 task createDockerStartScript(type: CreateStartScripts) {
-    mainClassName = 'example.multiappstartscript.Main'
+    mainClassName = "${application.mainClassName}"
     classpath = startScripts.classpath
-    outputDir = startScripts.outputDir
-    applicationName = 'example-app-docker'
-    defaultJvmOpts = ['-Dexample.deployment=Docker']
+    outputDir = new File("${buildDir}/dockerStartScripts")
+    applicationName = "${application.applicationName}-docker"
+    defaultJvmOpts = ['-Dexample.deployment=Docker'].plus(project.ext.commonJvmArgs)
 }
-build.dependsOn createDockerStartScript
 
-applicationDistribution.into('bin') {
-    duplicatesStrategy= DuplicatesStrategy.EXCLUDE
-    from(createDockerStartScript)
-    fileMode = 0755
-}
+build.dependsOn createDockerStartScript
 
 task buildImage(type: DockerBuildImage, dependsOn: build) {
     inputDir = new File("${projectDir}")
     dockerFile = new File("${projectDir}/src/docker/Dockerfile")
-    tags = ["gregnetifi/${projectDir.name}", "gregnetifi/${projectDir.name}:${version}"]
+    tags = ["gregnetifi/${application.applicationName}", "gregnetifi/${application.applicationName}:${version}"]
 }
+
 
 // Build Distributions
 distributions {
     main {
-        baseName = 'example-app'
-        version = ''
+        baseName = "${application.applicationName}"
     }
 
     docker {
-        baseName = 'example-app-docker'
-        version = ''
+        baseName = "${application.applicationName}-docker"
         contents {
-            with distributions.main.contents
+            from (jar) {
+                into 'lib'
+            }
+            from (createDockerStartScript) {
+                into 'bin'
+                fileMode = 0755
+            }
         }
     }
+}
+
+dockerDistTar {
+    version = ''
+}
+dockerDistZip {
+    enabled = false
 }
